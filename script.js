@@ -1,14 +1,41 @@
-'use strict';
-alert('działa?');
-    // function TrollKill(field, restrictedWords){
-    //     this._field = field;
-    //     this._words = restrictedWords.split(/, */);
-    // }
+(function(){
+    
+    function TrollKill(field, restrictedWords){
 
-    let button = document.querySelector('button');
-    let text = document.querySelector('textarea');
-    console.log(button, text);
-    button.addEventListener('click',()=>{
-        console.log(text.value);
-    })
+        this._field = field;
+        this._words = restrictedWords.split(/, */);
+        this._regEx = new RegExp(`(${this._words.join('|')})`, 'gim');
+
+        this._assignEvents();
+    }
+
+
+    // events engine 
+
+    TrollKill.prototype._assignEvents = function(){
+        this._field.addEventListener('keyup', this._filterMessage.bind(this));
+    }
+
+    // filter and replace engine 
+
+    TrollKill.prototype._filterMessage = function(e){
+        console.log(e);
+
+        this._field.value = this._field.value.replace(this._regEx, function(match){
+
+            const _char = '#';
+            let _res = "";
+
+            for (let i =0; i<match.length; i++){
+                _res += _char
+            }
+
+            return _res;
+
+        })
+    }
+
+    new TrollKill(document.querySelector('[name="message-field"]'), 'bird, dog, cat');
+
+})();
 
